@@ -86,7 +86,7 @@ void reverse(SqList &L) {
 // 3.长度为n的顺序表L，删除所有值为x的元素。要求时间复杂度O(n)，空间复杂度O(1)
 // 用k记录顺序表L不等于x元素的个数，扫描时将不等于x的元素移动到下标k的位置，并更新k值。扫描结束后修改L的长度。
 void del_x_1(SqList &L, ElemType x) {
-    int k = 0;
+    int k = 0, i;
     for (i = 0; i < L.length; i++)
         if (L.data[i] != x) {
             L.data[k] = L.data[i];
@@ -161,4 +161,92 @@ bool del_order_same(SqList &L) {
             L.data[++i] = L.data[j];
     L.length = i + 1;
     return true;
+}
+
+// 重点 7.将2个有序顺序表合并为一个新的有序顺序表
+bool merge_2_order(SqList A, SqList B, SqList &C) {
+    if (A.length + B.length > MaxSize) 
+        return false;
+    int i = 0, j = 0, k = 0;
+    while(i < A.length && j < B.length) { // 循环，两两比较，小的存入结果表
+        if (A.data[i] <= B.data[j])
+            C.data[k++] = A.data[i++];
+        else 
+            C.data[k++] = B.data[j++];    
+    }
+    // 还剩下一个没有比较完的顺序表
+    while (i < A.length) 
+        c.data[k++] = A.data[i];
+    while (j < B.length) 
+        c.data[k++] = B.data[j];
+    c.length = k;
+    return true;
+}
+
+// 8.一位数组A[m+n]依次存放了两个线性表{a1,a2,...,am} {b1,b2,...bn}
+// 将数组中两个顺序表的位置互换，即将{b1,b2,...bn}放在{a1,a2,...,am}前。
+// 思路：先将数组A全部逆置，再对n和m分别逆置。
+typedef int DataType;
+// 逆转（left,left+1,...,right-1,right）为（right, right-1,...,left+1,left）
+void reverse(DataType A[], int left, int right, int arraySize) {
+    if (left >= right || right >= arraySize)
+        return false;
+    int middle = (left + right)/2;
+    for (int i = 0; i <= middle - left; i++) {
+        DataType temp = A[left+i];
+        A[left+i] = A[right-i];
+        A[right-i] = temp;
+    }
+}
+
+// 数组A[m+n]，0到m-1存放顺序表（a1,a2,...,am）,从m到m+n-1存放顺序表（b1,b2,...,bn），将这两个表的位置互换。
+void Exchange(DataType A[], int m, int n, int arraySize) {
+    reverse(A, 0, m+n-1, arraySize);
+    reverse(A, 0, n-1, arraySize);
+    reverse(B, n, m+n-1, arraySize);
+}
+
+// 9.长度为n的有序顺序表，查找值为x的元素。如有，将其与后继元素相交换；如没有将其插入表中并保持有序。要求：最少的时间
+// 思路，使用折半查法
+void search_exchange_or_insert(ElemType A[], ElemType x) {
+    int low = 0, high = n-1, low;
+    while (low <= high) {
+        mid = (low + high)/2;
+        if (A[mid] == x) break;  // 找到x，退出while循环
+        else if (A[mid] < x) low = mid+1; // 到终点mid的右半部去查
+        else high = mid - 1;              // 到终点mid的左半部去查
+    }
+    if (A[mid] == x && mid != n - 1) {     // 若最后一个元素与x相等，则不存在与其后继交换的操作
+        tmp = A[mid];
+        A[mid] = A[mid+1];
+        A[mid+1] = t;
+    }
+    if (low > high) {   // 查找失败，插入数据元素x
+        for (i = n - 1; i > high; i--) {    // 后移元素
+            A[i+1] = A[i];
+        }   
+        A[i+1] = x;     // 插入x
+    }
+}
+
+// 10.将n(n>1)个整数存放在一维数组R中。将R的序列循环左移p(0<p<n)个位置，
+// 即将R中数据由(X0,X1,...,Xn-1)变为(Xp,Xp+1,...,Xn-1,X0,...,Xp-1)。要求时间和空间尽可能高效。
+// 思路：同第8题，先逆转0至p-1，再逆转p-1至n-1，最后逆置全部元素。
+// 对于abcdefg，向左循环移动3个位置（p=3），最终为defgabc
+// reverse(0, p-1),cbadefg
+// reverse(p, n-1),cbagfed
+// reverse(0, n-1),defgabc
+void reverse(int R[], int from, int to) {
+    int i, temp;
+    for (i = 0; i < (to-from+1)/2; i++) {
+        temp = R[from+1];
+        R[from+1] = R[to-1];
+        R[to-1] = temp;
+    }
+}
+
+void converse(int R[], int n, int p) {
+    reverse(R, 0, p-1);
+    reverse(R, p, n-1);
+    reverse(R, 0, n-1);
 }
