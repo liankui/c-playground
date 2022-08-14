@@ -1,7 +1,6 @@
 #include <stdio.h>
 
 typedef int ElemType;
-typedef int bool;
 
 // 静态分配
 #define MaxSize 50
