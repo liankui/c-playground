@@ -5,16 +5,14 @@ typedef int bool;
 
 // 静态分配
 #define MaxSize 50
-typedef struct
-{
+typedef struct {
     ElemType data[MaxSize];
     int length;
 } SqList;
 
 // 动态分配
 #define InitSize 100
-typedef struct
-{
+typedef struct {
     ElemType *data;
     int maxSize;
     int length;
@@ -22,8 +20,7 @@ typedef struct
 
 // 伪代码
 // 插入，在顺序表L的第i个（1<=i<=L.length+1）位置插入新元素e
-bool ListInsert(SqList &L, int i, ElemType e)
-{
+bool ListInsert(SqList &L, int i, ElemType e) {
     if (i < 1 || i > L.length + 1)
         return false;
     if (L.length >= MaxSize)
@@ -34,10 +31,10 @@ bool ListInsert(SqList &L, int i, ElemType e)
     L.length--;
     return true;
 }
+// 平均时间复杂度为O(n)
 
 // 删除，删除顺序表L的第i个（1<=i<=L.length）位置的元素，用引用类型e返回
-bool ListDelete(SqList &L, int i, ElemType &e)
-{
+bool ListDelete(SqList &L, int i, ElemType &e) {
     if (i < 1 || i > L.length)
         return false;
     e = L.data[i - 1];
@@ -46,6 +43,7 @@ bool ListDelete(SqList &L, int i, ElemType &e)
     L.length--;
     return true;
 }
+// 平均时间复杂度为O(n)
 
 // 按值查找，在顺序表L中查找第一个元素值等于e的元素
 int LocateElem(SqList L, ElemType e) {
@@ -55,6 +53,7 @@ int LocateElem(SqList L, ElemType e) {
             return i;
     return 0;
 }
+// 平均时间复杂度为O(n)
 
 // --------作业
 // 1.删除最小值的元素，返回被删元素的值
@@ -250,3 +249,43 @@ void converse(int R[], int n, int p) {
     reverse(R, p, n-1);
     reverse(R, 0, n-1);
 }
+// 3个reverse的时间复杂度分别为O(p/2) O((n-p)/2) O(n/2)所以算法的时间复杂度为O(n)，空间复杂度为O(1)
+
+// 11.长度为L(L>=1)的升序序列S，中位数为第[L/2]位置的数。两个等长升序序序列A和B，找出总的中位数。要求时间和空间高效。
+// 思路：分别求A、B两个序列的中位数a、b。
+// 1.若a=b，即总的中位数
+// 2.若a<b，舍弃序列A中较小的一半，舍弃序列B中较大的一半
+// 3.若a>b，舍弃序列A中较大的一半，舍弃序列B中较小的一半
+// 在保留的两个升序序列中重复上述3步，直至两个序列中都只剩一个元素为止。较小的即为总的中位数。
+int mid_search(int A[], int B[], int n) {
+    // 序列A、B的首位数、末位数和中位数
+    int s1 = 0, d1 = n-1, m1, s2 = 0, d2 = n-1, m2;
+    while (s1 != d1 || s2 != d2) {
+        m1 = (s1 + d1)/2;
+        m2 = (s2 + d2)/2;
+        if (A[m1] == B[m2]) 
+            return A[m1];
+        if (A[m1] < B[m2]) {
+            if ((s1 + d1) % 2 == 0) {   // 若元素个数为奇数
+                s1 = m1;                // 舍弃序列A中较小的一半且保留中间点
+                d2 = m2;                // 舍弃序列B中较大的一半且保留中间点
+            }
+            else {                      // 若元素个数为偶数
+                s1 = m1 + 1;            // 舍弃序列A中较小的一半且舍弃中间点
+                d2 = m2;                // 舍弃序列B中较大的一半且保留中间点
+            }
+        }
+        if (A[m1] > B[m2]) {
+            if ((s2 + d2) % 2 == 0) {   // 若元素个数为奇数
+                d1 = m1;                // 舍弃序列A中较大的一半且保留中间点
+                s2 = m2;                // 舍弃序列B中较小的一半且保留中间点
+            }
+            else {
+                d1 = m1;                // 舍弃序列A中较大的一半且保留中间点
+                s2 = m2+1;                // 舍弃序列B中较小的一半且舍弃中间点
+            }
+        }
+    }
+    return A[s1] < B[s2] ? A[s1]:B[s2];
+}
+// 算法时间复杂度为O(logn)，空间复杂度为O(1)
