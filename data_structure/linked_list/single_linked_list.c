@@ -9,17 +9,16 @@ typedef struct LNode {
 } LNode, *LinkList;
 
 // 头插法建立单链表
-LinkList List_HeadInsert(LinkList &L) {
-    LNode *s;
-    int x;
-    L = (LinkList)malloc(sizeof(LNode)); // 创建头结点
-    L -> next = NULL;
-    scanf("%d", &x);
-    while(x != 9999) {
+LinkList List_HeadInsert(LinkList &L) { // 逆向建立单链表
+    LNode *s, int x;
+    L = (LinkList)malloc(sizeof(LNode));  // 创建头结点
+    L->next = NULL;
+    scanf("%d", &x);    // 输入结点的值
+    while (x != 999) {
         s = (LNode*)malloc(sizeof(LNode));
         s->data = x;
         s->next = L->next;
-        L->next = s;
+        L->next = s;        // 将新结点插入表中，L为头指针
         scanf("%d", &x);
     }
     return L;
@@ -28,7 +27,7 @@ LinkList List_HeadInsert(LinkList &L) {
 // 每个结点插入的时间复杂度为O(1)，总时间复杂度为O(n)。
 
 // 尾插法建立单链表
-LinkList List_TailInsert(LinkList &L) {
+LinkList List_TailInsert(LinkList &L) { // 正向建立单链表
     int x;
     L = (LinkList)malloc(sizeof(LNode));  // 创建头结点
     LNode *s, *r = L;   // r为尾指针
@@ -114,6 +113,8 @@ void demo() {
 
 // 求表长，需设置一个计数器，遍历每个结点，时间复杂度为O(n)
 
+// 作业
 
+// 1.删除不带头结点的单链表L中所有值为x的结点。要求：使用递归
 
 
