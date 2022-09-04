@@ -113,8 +113,56 @@ void demo() {
 
 // 求表长，需设置一个计数器，遍历每个结点，时间复杂度为O(n)
 
-// 作业
-
+// ====作业
 // 1.删除不带头结点的单链表L中所有值为x的结点。要求：使用递归
+void Del_x_3(LinkList &L, ElemType x) {
+    LNode *p;           // p指向待删除结点
+    if (L == Null ) {   // 递归出口
+        return;
+    }
+    if (L->data == x) { // 若L所指结点的值为x
+        p = L;
+        L = L->next;
+        free(p);
+        Del_x_3(L, x);
+    } else {
+        Del_x_3(L->next, x);
+    }
+}
+// 时间复杂度O(n)
+
+// 2.删除带头结点的单链表L中所有值为x的结点。
+// 解法1：用p从头到尾扫描单链表，pre指向*p结点的前驱
+// 若p所指向的结点的值为x，则删除，并让p移向下一个结点，否则让pre、p指针同步后移一个结点。
+void Del_x_1(LinkList &L, ElemType x) {
+    LNode *p = L->next, *pre = L, *q;
+    while (p != NULL) {
+        if (p->data == x) {
+            q = p;          // q指向该结点
+            p = p->next;
+            pre->next = p;  // 删除*q结点
+            free(q);
+        } else {
+            pre = p;
+            p = p->next;
+        }
+    }
+}
+// 采用尾插法建立单链表。用p指针扫描L的所有结点，当其值不为x时，将其链接到L之后，否则将其释放。
+void Del_x_2(LinkList &L, ElemType x) {
+     LNode *p = L->next, *r = L, *q;    // r指向尾结点，其初始值为头结点
+     while (p != NULL) {
+        if (p->data != x) {     // *p结点值不为x时将其链接到L尾部
+            r->next = p;
+            r = p;
+            p = p->next;
+        } else {
+            q = p;
+            p = p->next;
+            free(q);
+        }
+     }
+     r->next = NULL;        // 插入结束后，置尾结点指针为NULL
+}
 
 
