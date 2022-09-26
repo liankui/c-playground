@@ -71,7 +71,7 @@ bool del_min(SqList &L, ElemType &value) {
     return true;
 }
 
-// 2.将书序表L逆置，要求空间复杂度O(1)
+// 2.将顺序表L逆置，要求空间复杂度O(1)
 void reverse(SqList &L) {
     ElemType temp;
     for (i = 0; i < L.length/2; i++) {
